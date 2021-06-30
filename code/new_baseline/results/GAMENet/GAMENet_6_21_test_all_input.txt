@@ -1,0 +1,414 @@
+/home/zhengh/GAMENet/code/baseline
+/home/zhengh/GAMENet/code/baseline
+------------------
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0000, Jaccard: 0.3018,  PRAUC: 0.6293, AVG_PRC: 0.7485, AVG_RECALL: 0.3461, AVG_F1: 0.4560
+
+	Epoch: 0, Loss1: 0.4783, One Epoch Time: 1.94m, Appro Left Time: 0.29h
+
+	 epoch: 1.00, DDI Rate: 0.0004, Jaccard: 0.2738,  PRAUC: 0.6374, AVG_PRC: 0.7699, AVG_RECALL: 0.3076, AVG_F1: 0.4208
+
+	Epoch: 1, Loss1: 0.4383, One Epoch Time: 2.06m, Appro Left Time: 0.27h
+
+	 epoch: 2.00, DDI Rate: 0.0006, Jaccard: 0.2723,  PRAUC: 0.6400, AVG_PRC: 0.7749, AVG_RECALL: 0.3057, AVG_F1: 0.4185
+
+	Epoch: 2, Loss1: 0.4265, One Epoch Time: 2.01m, Appro Left Time: 0.23h
+
+	 epoch: 3.00, DDI Rate: 0.0008, Jaccard: 0.2701,  PRAUC: 0.6425, AVG_PRC: 0.7780, AVG_RECALL: 0.3022, AVG_F1: 0.4152
+
+	Epoch: 3, Loss1: 0.4204, One Epoch Time: 2.08m, Appro Left Time: 0.21h
+
+	 epoch: 4.00, DDI Rate: 0.0007, Jaccard: 0.2716,  PRAUC: 0.6442, AVG_PRC: 0.7782, AVG_RECALL: 0.3043, AVG_F1: 0.4170
+
+	Epoch: 4, Loss1: 0.4156, One Epoch Time: 2.01m, Appro Left Time: 0.17h
+
+	 epoch: 5.00, DDI Rate: 0.0009, Jaccard: 0.2743,  PRAUC: 0.6456, AVG_PRC: 0.7776, AVG_RECALL: 0.3074, AVG_F1: 0.4201
+
+	Epoch: 5, Loss1: 0.4108, One Epoch Time: 2.01m, Appro Left Time: 0.13h
+
+	 epoch: 6.00, DDI Rate: 0.0010, Jaccard: 0.2760,  PRAUC: 0.6466, AVG_PRC: 0.7805, AVG_RECALL: 0.3092, AVG_F1: 0.4225
+
+	Epoch: 6, Loss1: 0.4072, One Epoch Time: 2.03m, Appro Left Time: 0.10h
+
+	 epoch: 7.00, DDI Rate: 0.0013, Jaccard: 0.2792,  PRAUC: 0.6479, AVG_PRC: 0.7806, AVG_RECALL: 0.3133, AVG_F1: 0.4265
+
+	Epoch: 7, Loss1: 0.4035, One Epoch Time: 2.09m, Appro Left Time: 0.07h
+
+	 epoch: 8.00, DDI Rate: 0.0013, Jaccard: 0.2799,  PRAUC: 0.6487, AVG_PRC: 0.7773, AVG_RECALL: 0.3143, AVG_F1: 0.4275
+
+	Epoch: 8, Loss1: 0.4006, One Epoch Time: 2.04m, Appro Left Time: 0.03h
+
+	 epoch: 9.00, DDI Rate: 0.0012, Jaccard: 0.2804,  PRAUC: 0.6492, AVG_PRC: 0.7776, AVG_RECALL: 0.3148, AVG_F1: 0.4281
+
+	Epoch: 9, Loss1: 0.3978, One Epoch Time: 2.04m, Appro Left Time: 0.00h
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0155, Jaccard: 0.3221,  PRAUC: 0.6123, AVG_PRC: 0.3506, AVG_RECALL: 0.8225, AVG_F1: 0.4781
+
+	Epoch: 0, Loss1: 32335.0109, One Epoch Time: 1.98m, Appro Left Time: 0.30h
+
+	 epoch: 1.00, DDI Rate: 0.0158, Jaccard: 0.3191,  PRAUC: 0.6177, AVG_PRC: 0.3452, AVG_RECALL: 0.8336, AVG_F1: 0.4750
+
+	Epoch: 1, Loss1: 63.2848, One Epoch Time: 2.09m, Appro Left Time: 0.28h
+
+	 epoch: 2.00, DDI Rate: 0.0148, Jaccard: 0.3386,  PRAUC: 0.6168, AVG_PRC: 0.3787, AVG_RECALL: 0.7878, AVG_F1: 0.4968
+
+	Epoch: 2, Loss1: 33.9954, One Epoch Time: 2.15m, Appro Left Time: 0.25h
+
+	 epoch: 3.00, DDI Rate: 0.0148, Jaccard: 0.3393,  PRAUC: 0.6165, AVG_PRC: 0.3882, AVG_RECALL: 0.7533, AVG_F1: 0.4972
+
+	Epoch: 3, Loss1: 2.0021, One Epoch Time: 2.00m, Appro Left Time: 0.20h
+
+	 epoch: 4.00, DDI Rate: 0.0144, Jaccard: 0.3495,  PRAUC: 0.6162, AVG_PRC: 0.4072, AVG_RECALL: 0.7347, AVG_F1: 0.5080
+
+	Epoch: 4, Loss1: 0.7135, One Epoch Time: 2.10m, Appro Left Time: 0.18h
+
+	 epoch: 5.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6163, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 5, Loss1: 7.4140, One Epoch Time: 2.09m, Appro Left Time: 0.14h
+
+	 epoch: 6.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6163, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 6, Loss1: 13.9672, One Epoch Time: 2.05m, Appro Left Time: 0.10h
+
+	 epoch: 7.00, DDI Rate: 0.0129, Jaccard: 0.2598,  PRAUC: 0.2398, AVG_PRC: 0.3969, AVG_RECALL: 0.4481, AVG_F1: 0.4057
+
+	Epoch: 7, Loss1: 1.9203, One Epoch Time: 2.06m, Appro Left Time: 0.07h
+
+	 epoch: 8.00, DDI Rate: 0.0142, Jaccard: 0.3581,  PRAUC: 0.6158, AVG_PRC: 0.4418, AVG_RECALL: 0.6763, AVG_F1: 0.5173
+
+	Epoch: 8, Loss1: 6.4462, One Epoch Time: 2.04m, Appro Left Time: 0.03h
+
+	 epoch: 9.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6157, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 9, Loss1: 1.0720, One Epoch Time: 2.11m, Appro Left Time: 0.00h
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0165, Jaccard: 0.3130,  PRAUC: 0.6002, AVG_PRC: 0.3372, AVG_RECALL: 0.8363, AVG_F1: 0.4678
+
+	Epoch: 0, Loss1: 31496.3410, One Epoch Time: 2.14m, Appro Left Time: 0.32h
+
+	 epoch: 1.00, DDI Rate: 0.0154, Jaccard: 0.3233,  PRAUC: 0.6137, AVG_PRC: 0.3516, AVG_RECALL: 0.8254, AVG_F1: 0.4796
+
+	Epoch: 1, Loss1: 119.0081, One Epoch Time: 2.02m, Appro Left Time: 0.27h
+
+	 epoch: 2.00, DDI Rate: 0.0156, Jaccard: 0.3308,  PRAUC: 0.6161, AVG_PRC: 0.3722, AVG_RECALL: 0.7719, AVG_F1: 0.4878
+
+	Epoch: 2, Loss1: 1.9461, One Epoch Time: 2.06m, Appro Left Time: 0.24h
+
+	 epoch: 3.00, DDI Rate: 0.0148, Jaccard: 0.3393,  PRAUC: 0.6162, AVG_PRC: 0.3882, AVG_RECALL: 0.7533, AVG_F1: 0.4972
+
+	Epoch: 3, Loss1: 8.8094, One Epoch Time: 2.11m, Appro Left Time: 0.21h
+
+	 epoch: 4.00, DDI Rate: 0.0143, Jaccard: 0.3547,  PRAUC: 0.6162, AVG_PRC: 0.4177, AVG_RECALL: 0.7247, AVG_F1: 0.5136
+
+	Epoch: 4, Loss1: 0.9430, One Epoch Time: 1.97m, Appro Left Time: 0.16h
+
+	 epoch: 5.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6162, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 5, Loss1: 16.0921, One Epoch Time: 2.09m, Appro Left Time: 0.14h
+
+	 epoch: 6.00, DDI Rate: 0.0142, Jaccard: 0.3626,  PRAUC: 0.6163, AVG_PRC: 0.4380, AVG_RECALL: 0.6995, AVG_F1: 0.5217
+
+	Epoch: 6, Loss1: 19.3636, One Epoch Time: 2.04m, Appro Left Time: 0.10h
+
+	 epoch: 7.00, DDI Rate: 0.0142, Jaccard: 0.3581,  PRAUC: 0.6163, AVG_PRC: 0.4418, AVG_RECALL: 0.6763, AVG_F1: 0.5173
+
+	Epoch: 7, Loss1: 2.3961, One Epoch Time: 2.04m, Appro Left Time: 0.07h
+
+	 epoch: 8.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6162, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 8, Loss1: 1.9572, One Epoch Time: 2.07m, Appro Left Time: 0.03h
+
+	 epoch: 9.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6162, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 9, Loss1: 1.7759, One Epoch Time: 2.06m, Appro Left Time: 0.00h
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0199, Jaccard: 0.0984,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5794, AVG_F1: 0.1769
+
+	Epoch: 0, Loss1: inf, One Epoch Time: 2.60m, Appro Left Time: 0.39h
+
+	 epoch: 1.00, DDI Rate: 0.0199, Jaccard: 0.0985,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5801, AVG_F1: 0.1770
+
+	Epoch: 1, Loss1: inf, One Epoch Time: 2.60m, Appro Left Time: 0.35h
+
+	 epoch: 2.00, DDI Rate: 0.0200, Jaccard: 0.0985,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5805, AVG_F1: 0.1771
+
+	Epoch: 2, Loss1: inf, One Epoch Time: 2.59m, Appro Left Time: 0.30h
+
+	 epoch: 3.00, DDI Rate: 0.0200, Jaccard: 0.0985,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5806, AVG_F1: 0.1770
+
+	Epoch: 3, Loss1: inf, One Epoch Time: 2.63m, Appro Left Time: 0.26h
+
+	 epoch: 4.00, DDI Rate: 0.0200, Jaccard: 0.0985,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5807, AVG_F1: 0.1770
+
+	Epoch: 4, Loss1: inf, One Epoch Time: 2.49m, Appro Left Time: 0.21h
+
+	 epoch: 5.00, DDI Rate: 0.0200, Jaccard: 0.0984,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5803, AVG_F1: 0.1770
+
+	Epoch: 5, Loss1: inf, One Epoch Time: 2.63m, Appro Left Time: 0.18h
+
+	 epoch: 6.00, DDI Rate: 0.0200, Jaccard: 0.0984,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5803, AVG_F1: 0.1770
+
+	Epoch: 6, Loss1: inf, One Epoch Time: 2.57m, Appro Left Time: 0.13h
+
+	 epoch: 7.00, DDI Rate: 0.0200, Jaccard: 0.0984,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5803, AVG_F1: 0.1770
+
+	Epoch: 7, Loss1: inf, One Epoch Time: 2.52m, Appro Left Time: 0.08h
+
+	 epoch: 8.00, DDI Rate: 0.0200, Jaccard: 0.0984,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5803, AVG_F1: 0.1770
+
+	Epoch: 8, Loss1: inf, One Epoch Time: 2.63m, Appro Left Time: 0.04h
+
+	 epoch: 9.00, DDI Rate: 0.0200, Jaccard: 0.0984,  PRAUC: 0.1065, AVG_PRC: 0.1066, AVG_RECALL: 0.5802, AVG_F1: 0.1770
+
+	Epoch: 9, Loss1: inf, One Epoch Time: 2.55m, Appro Left Time: 0.00h
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0155, Jaccard: 0.3234,  PRAUC: 0.6091, AVG_PRC: 0.3517, AVG_RECALL: 0.8259, AVG_F1: 0.4798
+
+	Epoch: 0, Loss1: 31433.7471, One Epoch Time: 2.11m, Appro Left Time: 0.32h
+
+	 epoch: 1.00, DDI Rate: 0.0158, Jaccard: 0.3191,  PRAUC: 0.6161, AVG_PRC: 0.3452, AVG_RECALL: 0.8336, AVG_F1: 0.4750
+
+	Epoch: 1, Loss1: 43.1509, One Epoch Time: 2.10m, Appro Left Time: 0.28h
+
+	 epoch: 2.00, DDI Rate: 0.0148, Jaccard: 0.3393,  PRAUC: 0.6167, AVG_PRC: 0.3882, AVG_RECALL: 0.7533, AVG_F1: 0.4972
+
+	Epoch: 2, Loss1: 1.3417, One Epoch Time: 1.99m, Appro Left Time: 0.23h
+
+	 epoch: 3.00, DDI Rate: 0.0148, Jaccard: 0.3393,  PRAUC: 0.6163, AVG_PRC: 0.3882, AVG_RECALL: 0.7533, AVG_F1: 0.4972
+
+	Epoch: 3, Loss1: 13.1370, One Epoch Time: 2.05m, Appro Left Time: 0.21h
+
+	 epoch: 4.00, DDI Rate: 0.0144, Jaccard: 0.3495,  PRAUC: 0.6161, AVG_PRC: 0.4072, AVG_RECALL: 0.7347, AVG_F1: 0.5080
+
+	Epoch: 4, Loss1: 0.9048, One Epoch Time: 2.10m, Appro Left Time: 0.17h
+
+	 epoch: 5.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6161, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 5, Loss1: 35.8812, One Epoch Time: 2.04m, Appro Left Time: 0.14h
+
+	 epoch: 6.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6163, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 6, Loss1: 11.1023, One Epoch Time: 2.05m, Appro Left Time: 0.10h
+
+	 epoch: 7.00, DDI Rate: 0.0142, Jaccard: 0.3581,  PRAUC: 0.6162, AVG_PRC: 0.4418, AVG_RECALL: 0.6763, AVG_F1: 0.5173
+
+	Epoch: 7, Loss1: 3.0264, One Epoch Time: 1.95m, Appro Left Time: 0.07h
+
+	 epoch: 8.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6163, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 8, Loss1: 2.4171, One Epoch Time: 2.05m, Appro Left Time: 0.03h
+
+	 epoch: 9.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6162, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 9, Loss1: 1.0570, One Epoch Time: 2.11m, Appro Left Time: 0.00h
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0168, Jaccard: 0.3171,  PRAUC: 0.6071, AVG_PRC: 0.3435, AVG_RECALL: 0.8272, AVG_F1: 0.4722
+
+	Epoch: 0, Loss1: 29880.7092, One Epoch Time: 2.13m, Appro Left Time: 0.32h
+
+	 epoch: 1.00, DDI Rate: 0.0158, Jaccard: 0.3235,  PRAUC: 0.6103, AVG_PRC: 0.3518, AVG_RECALL: 0.8254, AVG_F1: 0.4799
+
+	Epoch: 1, Loss1: 39.2920, One Epoch Time: 2.02m, Appro Left Time: 0.27h
+
+	 epoch: 2.00, DDI Rate: 0.0156, Jaccard: 0.3329,  PRAUC: 0.6140, AVG_PRC: 0.3783, AVG_RECALL: 0.7591, AVG_F1: 0.4902
+
+	Epoch: 2, Loss1: 0.9408, One Epoch Time: 2.05m, Appro Left Time: 0.24h
+
+	 epoch: 3.00, DDI Rate: 0.0148, Jaccard: 0.3393,  PRAUC: 0.6161, AVG_PRC: 0.3882, AVG_RECALL: 0.7533, AVG_F1: 0.4972
+
+	Epoch: 3, Loss1: 40.0112, One Epoch Time: 2.06m, Appro Left Time: 0.21h
+
+	 epoch: 4.00, DDI Rate: 0.0143, Jaccard: 0.3547,  PRAUC: 0.6161, AVG_PRC: 0.4177, AVG_RECALL: 0.7247, AVG_F1: 0.5136
+
+	Epoch: 4, Loss1: 0.6907, One Epoch Time: 2.11m, Appro Left Time: 0.18h
+
+	 epoch: 5.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6161, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 5, Loss1: 21.9407, One Epoch Time: 2.06m, Appro Left Time: 0.14h
+
+	 epoch: 6.00, DDI Rate: 0.0142, Jaccard: 0.3626,  PRAUC: 0.6162, AVG_PRC: 0.4380, AVG_RECALL: 0.6995, AVG_F1: 0.5217
+
+	Epoch: 6, Loss1: 8.7337, One Epoch Time: 2.07m, Appro Left Time: 0.10h
+
+	 epoch: 7.00, DDI Rate: 0.0142, Jaccard: 0.3581,  PRAUC: 0.6162, AVG_PRC: 0.4418, AVG_RECALL: 0.6763, AVG_F1: 0.5173
+
+	Epoch: 7, Loss1: 2.9217, One Epoch Time: 2.14m, Appro Left Time: 0.07h
+
+	 epoch: 8.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6163, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 8, Loss1: 1.5811, One Epoch Time: 2.08m, Appro Left Time: 0.03h
+
+	 epoch: 9.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6162, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 9, Loss1: 0.6765, One Epoch Time: 2.04m, Appro Left Time: 0.00h
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0162, Jaccard: 0.3138,  PRAUC: 0.6056, AVG_PRC: 0.3408, AVG_RECALL: 0.8237, AVG_F1: 0.4690
+
+	Epoch: 0, Loss1: 32934.1380, One Epoch Time: 1.99m, Appro Left Time: 0.30h
+
+	 epoch: 1.00, DDI Rate: 0.0159, Jaccard: 0.3213,  PRAUC: 0.6112, AVG_PRC: 0.3500, AVG_RECALL: 0.8229, AVG_F1: 0.4777
+
+	Epoch: 1, Loss1: 69.3988, One Epoch Time: 2.07m, Appro Left Time: 0.28h
+
+	 epoch: 2.00, DDI Rate: 0.0148, Jaccard: 0.3336,  PRAUC: 0.6116, AVG_PRC: 0.3744, AVG_RECALL: 0.7779, AVG_F1: 0.4910
+
+	Epoch: 2, Loss1: 0.8309, One Epoch Time: 2.01m, Appro Left Time: 0.23h
+
+	 epoch: 3.00, DDI Rate: 0.0149, Jaccard: 0.3441,  PRAUC: 0.6164, AVG_PRC: 0.3972, AVG_RECALL: 0.7439, AVG_F1: 0.5023
+
+	Epoch: 3, Loss1: 0.8719, One Epoch Time: 2.02m, Appro Left Time: 0.20h
+
+	 epoch: 4.00, DDI Rate: 0.0143, Jaccard: 0.3547,  PRAUC: 0.6164, AVG_PRC: 0.4177, AVG_RECALL: 0.7247, AVG_F1: 0.5136
+
+	Epoch: 4, Loss1: 13.2643, One Epoch Time: 2.09m, Appro Left Time: 0.17h
+
+	 epoch: 5.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6163, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 5, Loss1: 36.7771, One Epoch Time: 2.07m, Appro Left Time: 0.14h
+
+	 epoch: 6.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6162, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 6, Loss1: 15.9272, One Epoch Time: 2.05m, Appro Left Time: 0.10h
+
+	 epoch: 7.00, DDI Rate: 0.0142, Jaccard: 0.3581,  PRAUC: 0.6163, AVG_PRC: 0.4418, AVG_RECALL: 0.6763, AVG_F1: 0.5173
+
+	Epoch: 7, Loss1: 4.3499, One Epoch Time: 2.10m, Appro Left Time: 0.07h
+
+	 epoch: 8.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6163, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 8, Loss1: 2.1291, One Epoch Time: 2.07m, Appro Left Time: 0.03h
+
+	 epoch: 9.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6163, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 9, Loss1: 0.8601, One Epoch Time: 2.02m, Appro Left Time: 0.00h
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0166, Jaccard: 0.3187,  PRAUC: 0.6089, AVG_PRC: 0.3447, AVG_RECALL: 0.8306, AVG_F1: 0.4739
+
+	Epoch: 0, Loss1: 34630.9867, One Epoch Time: 2.11m, Appro Left Time: 0.32h
+
+	 epoch: 1.00, DDI Rate: 0.0154, Jaccard: 0.3233,  PRAUC: 0.6107, AVG_PRC: 0.3516, AVG_RECALL: 0.8254, AVG_F1: 0.4796
+
+	Epoch: 1, Loss1: 72.2297, One Epoch Time: 2.07m, Appro Left Time: 0.28h
+
+	 epoch: 2.00, DDI Rate: 0.0156, Jaccard: 0.3329,  PRAUC: 0.6145, AVG_PRC: 0.3783, AVG_RECALL: 0.7591, AVG_F1: 0.4902
+
+	Epoch: 2, Loss1: 21.5045, One Epoch Time: 2.03m, Appro Left Time: 0.24h
+
+	 epoch: 3.00, DDI Rate: 0.0149, Jaccard: 0.3441,  PRAUC: 0.6159, AVG_PRC: 0.3972, AVG_RECALL: 0.7439, AVG_F1: 0.5023
+
+	Epoch: 3, Loss1: 0.6864, One Epoch Time: 2.02m, Appro Left Time: 0.20h
+
+	 epoch: 4.00, DDI Rate: 0.0144, Jaccard: 0.3495,  PRAUC: 0.6163, AVG_PRC: 0.4072, AVG_RECALL: 0.7347, AVG_F1: 0.5080
+
+	Epoch: 4, Loss1: 9.7090, One Epoch Time: 2.11m, Appro Left Time: 0.18h
+
+	 epoch: 5.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6163, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 5, Loss1: 13.4907, One Epoch Time: 2.03m, Appro Left Time: 0.14h
+
+	 epoch: 6.00, DDI Rate: 0.0142, Jaccard: 0.3626,  PRAUC: 0.6163, AVG_PRC: 0.4380, AVG_RECALL: 0.6995, AVG_F1: 0.5217
+
+	Epoch: 6, Loss1: 9.6053, One Epoch Time: 2.00m, Appro Left Time: 0.10h
+
+	 epoch: 7.00, DDI Rate: 0.0142, Jaccard: 0.3581,  PRAUC: 0.6163, AVG_PRC: 0.4418, AVG_RECALL: 0.6763, AVG_F1: 0.5173
+
+	Epoch: 7, Loss1: 5.4661, One Epoch Time: 2.07m, Appro Left Time: 0.07h
+
+	 epoch: 8.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6163, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 8, Loss1: 2.2108, One Epoch Time: 2.00m, Appro Left Time: 0.03h
+
+	 epoch: 9.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6162, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 9, Loss1: 1.8725, One Epoch Time: 2.11m, Appro Left Time: 0.00h
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0160, Jaccard: 0.3237,  PRAUC: 0.6073, AVG_PRC: 0.3552, AVG_RECALL: 0.8080, AVG_F1: 0.4796
+
+	Epoch: 0, Loss1: 26643.4649, One Epoch Time: 2.12m, Appro Left Time: 0.32h
+
+	 epoch: 1.00, DDI Rate: 0.0158, Jaccard: 0.3217,  PRAUC: 0.6100, AVG_PRC: 0.3503, AVG_RECALL: 0.8219, AVG_F1: 0.4778
+
+	Epoch: 1, Loss1: 7.4616, One Epoch Time: 2.10m, Appro Left Time: 0.28h
+
+	 epoch: 2.00, DDI Rate: 0.0158, Jaccard: 0.3307,  PRAUC: 0.6108, AVG_PRC: 0.3683, AVG_RECALL: 0.7901, AVG_F1: 0.4881
+
+	Epoch: 2, Loss1: 6.7925, One Epoch Time: 2.02m, Appro Left Time: 0.24h
+
+	 epoch: 3.00, DDI Rate: 0.0149, Jaccard: 0.3441,  PRAUC: 0.6161, AVG_PRC: 0.3972, AVG_RECALL: 0.7439, AVG_F1: 0.5023
+
+	Epoch: 3, Loss1: 29.5171, One Epoch Time: 2.02m, Appro Left Time: 0.20h
+
+	 epoch: 4.00, DDI Rate: 0.0144, Jaccard: 0.3495,  PRAUC: 0.6162, AVG_PRC: 0.4072, AVG_RECALL: 0.7347, AVG_F1: 0.5080
+
+	Epoch: 4, Loss1: 9.0631, One Epoch Time: 2.04m, Appro Left Time: 0.17h
+
+	 epoch: 5.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6162, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 5, Loss1: 2.4726, One Epoch Time: 2.12m, Appro Left Time: 0.14h
+
+	 epoch: 6.00, DDI Rate: 0.0142, Jaccard: 0.3626,  PRAUC: 0.6160, AVG_PRC: 0.4380, AVG_RECALL: 0.6995, AVG_F1: 0.5217
+
+	Epoch: 6, Loss1: 26.6865, One Epoch Time: 2.09m, Appro Left Time: 0.10h
+
+	 epoch: 7.00, DDI Rate: 0.0129, Jaccard: 0.2745,  PRAUC: 0.2558, AVG_PRC: 0.4117, AVG_RECALL: 0.4568, AVG_F1: 0.4177
+
+	Epoch: 7, Loss1: 1.7948, One Epoch Time: 2.00m, Appro Left Time: 0.07h
+
+	 epoch: 8.00, DDI Rate: 0.0129, Jaccard: 0.2745,  PRAUC: 0.2558, AVG_PRC: 0.4117, AVG_RECALL: 0.4568, AVG_F1: 0.4177
+
+	Epoch: 8, Loss1: 0.0006, One Epoch Time: 2.09m, Appro Left Time: 0.03h
+
+	 epoch: 9.00, DDI Rate: 0.0129, Jaccard: 0.2745,  PRAUC: 0.2558, AVG_PRC: 0.4117, AVG_RECALL: 0.4568, AVG_F1: 0.4177
+
+	Epoch: 9, Loss1: 0.0006, One Epoch Time: 2.13m, Appro Left Time: 0.00h
+LR____9.505530998929784e-05____emb_dims____256____l2_regularization___8.01377484816919e-05
+
+	 epoch: 0.00, DDI Rate: 0.0166, Jaccard: 0.3199,  PRAUC: 0.6133, AVG_PRC: 0.3488, AVG_RECALL: 0.8175, AVG_F1: 0.4755
+
+	Epoch: 0, Loss1: 29744.1107, One Epoch Time: 2.09m, Appro Left Time: 0.31h
+
+	 epoch: 1.00, DDI Rate: 0.0159, Jaccard: 0.3213,  PRAUC: 0.6165, AVG_PRC: 0.3500, AVG_RECALL: 0.8229, AVG_F1: 0.4777
+
+	Epoch: 1, Loss1: 18.3808, One Epoch Time: 2.07m, Appro Left Time: 0.28h
+
+	 epoch: 2.00, DDI Rate: 0.0148, Jaccard: 0.3420,  PRAUC: 0.6164, AVG_PRC: 0.3859, AVG_RECALL: 0.7760, AVG_F1: 0.5005
+
+	Epoch: 2, Loss1: 26.7709, One Epoch Time: 2.10m, Appro Left Time: 0.25h
+
+	 epoch: 3.00, DDI Rate: 0.0149, Jaccard: 0.3441,  PRAUC: 0.6161, AVG_PRC: 0.3972, AVG_RECALL: 0.7439, AVG_F1: 0.5023
+
+	Epoch: 3, Loss1: 0.7120, One Epoch Time: 2.05m, Appro Left Time: 0.20h
+
+	 epoch: 4.00, DDI Rate: 0.0143, Jaccard: 0.3547,  PRAUC: 0.6163, AVG_PRC: 0.4177, AVG_RECALL: 0.7247, AVG_F1: 0.5136
+
+	Epoch: 4, Loss1: 0.9342, One Epoch Time: 2.10m, Appro Left Time: 0.18h
+
+	 epoch: 5.00, DDI Rate: 0.0144, Jaccard: 0.3582,  PRAUC: 0.6162, AVG_PRC: 0.4272, AVG_RECALL: 0.7121, AVG_F1: 0.5174
+
+	Epoch: 5, Loss1: 29.4773, One Epoch Time: 2.03m, Appro Left Time: 0.14h
+
+	 epoch: 6.00, DDI Rate: 0.0142, Jaccard: 0.3626,  PRAUC: 0.6162, AVG_PRC: 0.4380, AVG_RECALL: 0.6995, AVG_F1: 0.5217
+
+	Epoch: 6, Loss1: 26.8848, One Epoch Time: 2.12m, Appro Left Time: 0.11h
+
+	 epoch: 7.00, DDI Rate: 0.0142, Jaccard: 0.3581,  PRAUC: 0.6162, AVG_PRC: 0.4418, AVG_RECALL: 0.6763, AVG_F1: 0.5173
+
+	Epoch: 7, Loss1: 3.2945, One Epoch Time: 2.08m, Appro Left Time: 0.07h
+
+	 epoch: 8.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6162, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 8, Loss1: 1.3917, One Epoch Time: 2.07m, Appro Left Time: 0.03h
+
+	 epoch: 9.00, DDI Rate: 0.0140, Jaccard: 0.3595,  PRAUC: 0.6162, AVG_PRC: 0.4515, AVG_RECALL: 0.6594, AVG_F1: 0.5185
+
+	Epoch: 9, Loss1: 2.9207, One Epoch Time: 2.07m, Appro Left Time: 0.00h
+ddi_rate0.01320177155331526---ja0.3169534644827278--prauc0.5324508119213306---avg_p0.4456133122590874---avg_r---0.5967320519642278--avg_f1--0.4651951454207201
