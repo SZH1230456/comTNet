@@ -185,9 +185,9 @@ def eval(model, data_eval, similar_bank, voc_size, epoch, k, emb_dims, device):
 
 
 def train(emb_dims, LR, l2_regularization):
-    emb_dims = 2 ** int(emb_dims)
-    LR = 10 ** LR
-    l2_regularization = 10 ** l2_regularization
+    # emb_dims = 2 ** int(emb_dims)
+    # LR = 10 ** LR
+    # l2_regularization = 10 ** l2_regularization
     print('emb_dims___{}__LR__{}__l2_regularization___{}'.format(emb_dims, LR, l2_regularization))
 
     data_path = '../../data/records_final.pkl'
@@ -219,7 +219,8 @@ def train(emb_dims, LR, l2_regularization):
                   {'params': no_decay_list, 'weight_decay': 0.}]
     optimizer = Adam(parameters, lr=LR, weight_decay=l2_regularization)
 
-    max_ja = 0
+    max_ddi_rate, max_ja, max_prauc, max_avg_p, max_avg_r, max_avg_f1 = [0 for i in range(6)]
+
     for epoch in range(EPOCH):
         start_time = time.time()
         model.train()
@@ -231,7 +232,7 @@ def train(emb_dims, LR, l2_regularization):
             loss.backward(retain_graph=True)
             optimizer.step()
         ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = eval(model,
-                                                         data_eval, data_train[-100:],
+                                                         data_test, data_train[-100:],
                                                          voc_size,
                                                          epoch, k, emb_dims, device)
         end_time = time.time()
@@ -243,21 +244,42 @@ def train(emb_dims, LR, l2_regularization):
                                                                      elapsed_time * (EPOCH - epoch - 1) / 60))
         if ja > max_ja:
             max_ja = ja
-    return max_ja
-    # return ddi_rate, ja, prauc, avg_p, avg_r, avg_f1
+            max_ddi_rate = ddi_rate
+            max_prauc = prauc
+            max_avg_p = avg_p
+            max_avg_r = avg_r
+            max_acg_f1 = avg_f1
+
+    # return max_ja
+    return max_ddi_rate, max_ja, max_prauc, max_avg_p, max_avg_r, max_avg_f1
 
 
 if __name__ == '__main__':
     # train(emb_dims=128, LR=0.0001, l2_regularization=1e-5)
-    test_test('proposed_model_train_6_24_k_10.txt')
-    Encode_Decode_Time_BO = BayesianOptimization(
-            train, {
-                'emb_dims': (5, 8),
-                'LR': (-5, 0),
-                'l2_regularization': (-8, -3),
-            }
-        )
-    Encode_Decode_Time_BO.maximize()
-    print(Encode_Decode_Time_BO.max)
-    # ja = train(LR=0.04, l2_regularization=1e-6, emb_dims=128)
-    # print(ja)
+    test_test('proposed_model_test_6_24_k_10.txt')
+    # Encode_Decode_Time_BO = BayesianOptimization(
+    #         train, {
+    #             'emb_dims': (5, 8),
+    #             'LR': (-5, 0),
+    #             'l2_regularization': (-8, -3),
+    #         }
+    #     )
+    # Encode_Decode_Time_BO.maximize()
+    # print(Encode_Decode_Time_BO.max)
+    ddi_rate_all, ja_all, prauc_all, avg_p_all, avg_r_all, avg_f1_all = [[] for _ in range(6)]
+    for i in range(10):
+        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = train(LR=0.005352402532684133,
+                                                          l2_regularization=6.781584836727701e-07,
+                                                          emb_dims=32)
+        ddi_rate_all.append(ddi_rate)
+        ja_all.append(ja)
+        prauc_all.append(prauc)
+        avg_p_all.append(avg_p)
+        avg_r_all.append(avg_r)
+        avg_f1_all.append(avg_f1)
+    print('ddi_rate{}---ja{}--prauc{}---avg_p{}---avg_r---{}--avg_f1--{}'.format(np.mean(ddi_rate_all),
+                                                                                 np.mean(ja_all),
+                                                                                 np.mean(prauc_all),
+                                                                                 np.mean(avg_p_all),
+                                                                                 np.mean(avg_r_all),
+                                                                                 np.mean(avg_f1_all)))

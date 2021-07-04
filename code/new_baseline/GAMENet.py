@@ -96,15 +96,11 @@ class GAMENet(nn.Module):
         self.tensor_ddi_adj = torch.FloatTensor(ddi_adj).to(device)
         self.beta = nn.Parameter(torch.FloatTensor(1))
 
-        self.embedding_diagnosis = nn.Sequential(
-            nn.Embedding(self.voc_size[0], self.emb_dims),
-            nn.Dropout(p=0.3)
-        )
+        self.embedding_diagnosis = nn.Embedding(self.voc_size[0], self.emb_dims)
 
-        self.embedding_procedure = nn.Sequential(
-            nn.Embedding(self.voc_size[1], self.emb_dims),
-            nn.Dropout(p=0.3)
-        )
+        self.embedding_procedure = nn.Embedding(self.voc_size[1], self.emb_dims)
+
+        self.dropout = nn.Dropout(p=0.4)
 
         self.query = nn.Sequential(
             nn.ReLU(),
@@ -118,19 +114,19 @@ class GAMENet(nn.Module):
 
         self.output = nn.Sequential(
             nn.ReLU(),
-            nn.Linear(emb_dims * 3, emb_dims *2),
+            nn.Linear(emb_dims * 3, emb_dims * 2),
             nn.ReLU(),
             nn.Linear(emb_dims*2, voc_size[2])
         )
-        # self.init_weights()
+        self.init_weights()
 
     def forward(self, input):
         diagnosis_seq = []
         procedure_seq = []
         for adm in input:
-            diagnosis = self.embedding_diagnosis(torch.LongTensor(adm[0]).unsqueeze(dim=0).to(self.device))
+            diagnosis = self.dropout(self.embedding_diagnosis(torch.LongTensor(adm[0]).unsqueeze(dim=0).to(self.device)))
             # (1, len, dim)
-            procedure = self.embedding_procedure(torch.LongTensor(adm[1]).unsqueeze(dim=0).to(self.device))
+            procedure = self.dropout(self.embedding_procedure(torch.LongTensor(adm[1]).unsqueeze(dim=0).to(self.device)))
             # (1, len, dim)
             diagnosis_seq.append(diagnosis.mean(dim=1).unsqueeze(dim=0))  # (1, dim)
             procedure_seq.append(procedure.mean(dim=1).unsqueeze(dim=0))  # (1, dim)
@@ -179,10 +175,11 @@ class GAMENet(nn.Module):
     def init_weights(self):
         """Initialize weights."""
         initrange = 0.1
-        for item in self.embedding_diagnosis:
-            item.weight.data.uniform_(-initrange, initrange)
+        self.embedding_diagnosis.weight.data.uniform_(-initrange, initrange)
 
-        self.inter.data.uniform_(-initrange, initrange)
+        self.embedding_procedure.weight.data.uniform_(-initrange, initrange)
+
+        self.beta.data.uniform_(-initrange, initrange)
 
 
 def eval(model, data_eval, voc_size, epoch):
@@ -239,9 +236,9 @@ def eval(model, data_eval, voc_size, epoch):
 
 
 def train(LR, emb_dims, l2_regularization):
-    # LR = 10 ** LR
-    # emb_dims = 2 ** int(emb_dims)
-    # l2_regularization = 10 ** l2_regularization
+    LR = 10 ** LR
+    emb_dims = 2 ** int(emb_dims)
+    l2_regularization = 10 ** l2_regularization
     print('LR____{}____emb_dims____{}____l2_regularization___{}'.format(LR, emb_dims, l2_regularization))
 
     data_path = '../../data/records_final.pkl'
@@ -328,9 +325,9 @@ def train(LR, emb_dims, l2_regularization):
 
                     loss_record.append(loss.item())
 
-                T *= decay_weight
+        T *= decay_weight
 
-        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = eval(model, data_test, voc_size, epoch)
+        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = eval(model, data_eval, voc_size, epoch)
         end_time = time.time()
         elapsed_time = (end_time - start_time) / 60
         llprint('\tEpoch: %d, Loss1: %.4f, '
@@ -338,37 +335,37 @@ def train(LR, emb_dims, l2_regularization):
                                                                      np.mean(loss_record),
                                                                      elapsed_time,
                                                                      elapsed_time * (EPOCH - epoch - 1) / 60))
-    # return ja
-    return ddi_rate, ja, prauc, avg_p, avg_r, avg_f1
+    return ja
+    # return ddi_rate, ja, prauc, avg_p, avg_r, avg_f1
 
 
 if __name__ == '__main__':
-    test_test('GAMENet_6_21_test_all_input.txt')
-    # Encode_Decode_Time_BO = BayesianOptimization(
-    #         train, {
-    #             'emb_dims': (5, 8),
-    #             'LR': (-5, 0),
-    #             'l2_regularization': (-8, -3),
-    #         }
-    #     )
-    # Encode_Decode_Time_BO.maximize()
-    # print(Encode_Decode_Time_BO.max)
-    ddi_rate_all, ja_all, prauc_all, avg_p_all, avg_r_all, avg_f1_all = [[] for _ in range(6)]
-    for i in range(10):
-        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = train(LR=9.505530998929784e-05, emb_dims=256,
-                                                          l2_regularization=8.01377484816919e-05)
-        ddi_rate_all.append(ddi_rate)
-        ja_all.append(ja)
-        prauc_all.append(prauc)
-        avg_p_all.append(avg_p)
-        avg_r_all.append(avg_r)
-        avg_f1_all.append(avg_f1)
-    print('ddi_rate{}---ja{}--prauc{}---avg_p{}---avg_r---{}--avg_f1--{}'.format(np.mean(ddi_rate_all),
-                                                                                 np.mean(ja_all),
-                                                                                 np.mean(prauc_all),
-                                                                                 np.mean(avg_p_all),
-                                                                                 np.mean(avg_r_all),
-                                                                                 np.mean(avg_f1_all)))
+    test_test('GAMENet_7_4_train_all_input.txt')
+    Encode_Decode_Time_BO = BayesianOptimization(
+            train, {
+                'emb_dims': (5, 8),
+                'LR': (-5, 0),
+                'l2_regularization': (-8, -3),
+            }
+        )
+    Encode_Decode_Time_BO.maximize()
+    print(Encode_Decode_Time_BO.max)
+    # ddi_rate_all, ja_all, prauc_all, avg_p_all, avg_r_all, avg_f1_all = [[] for _ in range(6)]
+    # for i in range(10):
+    #     ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = train(LR=9.505530998929784e-05, emb_dims=256,
+    #                                                       l2_regularization=8.01377484816919e-05)
+    #     ddi_rate_all.append(ddi_rate)
+    #     ja_all.append(ja)
+    #     prauc_all.append(prauc)
+    #     avg_p_all.append(avg_p)
+    #     avg_r_all.append(avg_r)
+    #     avg_f1_all.append(avg_f1)
+    # print('ddi_rate{}---ja{}--prauc{}---avg_p{}---avg_r---{}--avg_f1--{}'.format(np.mean(ddi_rate_all),
+    #                                                                              np.mean(ja_all),
+    #                                                                              np.mean(prauc_all),
+    #                                                                              np.mean(avg_p_all),
+    #                                                                              np.mean(avg_r_all),
+    #                                                                              np.mean(avg_f1_all)))
 
 
 
