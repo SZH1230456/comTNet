@@ -236,9 +236,9 @@ def eval(model, data_eval, voc_size, epoch):
 
 
 def train(LR, emb_dims, l2_regularization):
-    LR = 10 ** LR
-    emb_dims = 2 ** int(emb_dims)
-    l2_regularization = 10 ** l2_regularization
+    # LR = 10 ** LR
+    # emb_dims = 2 ** int(emb_dims)
+    # l2_regularization = 10 ** l2_regularization
     print('LR____{}____emb_dims____{}____l2_regularization___{}'.format(LR, emb_dims, l2_regularization))
 
     data_path = '../../data/records_final.pkl'
@@ -327,7 +327,7 @@ def train(LR, emb_dims, l2_regularization):
 
         T *= decay_weight
 
-        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = eval(model, data_eval, voc_size, epoch)
+        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = eval(model, data_test, voc_size, epoch)
         end_time = time.time()
         elapsed_time = (end_time - start_time) / 60
         llprint('\tEpoch: %d, Loss1: %.4f, '
@@ -335,37 +335,37 @@ def train(LR, emb_dims, l2_regularization):
                                                                      np.mean(loss_record),
                                                                      elapsed_time,
                                                                      elapsed_time * (EPOCH - epoch - 1) / 60))
-    return ja
-    # return ddi_rate, ja, prauc, avg_p, avg_r, avg_f1
+    # return ja
+    return ddi_rate, ja, prauc, avg_p, avg_r, avg_f1
 
 
 if __name__ == '__main__':
-    test_test('GAMENet_7_4_train_all_input.txt')
-    Encode_Decode_Time_BO = BayesianOptimization(
-            train, {
-                'emb_dims': (5, 8),
-                'LR': (-5, 0),
-                'l2_regularization': (-8, -3),
-            }
-        )
-    Encode_Decode_Time_BO.maximize()
-    print(Encode_Decode_Time_BO.max)
-    # ddi_rate_all, ja_all, prauc_all, avg_p_all, avg_r_all, avg_f1_all = [[] for _ in range(6)]
-    # for i in range(10):
-    #     ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = train(LR=9.505530998929784e-05, emb_dims=256,
-    #                                                       l2_regularization=8.01377484816919e-05)
-    #     ddi_rate_all.append(ddi_rate)
-    #     ja_all.append(ja)
-    #     prauc_all.append(prauc)
-    #     avg_p_all.append(avg_p)
-    #     avg_r_all.append(avg_r)
-    #     avg_f1_all.append(avg_f1)
-    # print('ddi_rate{}---ja{}--prauc{}---avg_p{}---avg_r---{}--avg_f1--{}'.format(np.mean(ddi_rate_all),
-    #                                                                              np.mean(ja_all),
-    #                                                                              np.mean(prauc_all),
-    #                                                                              np.mean(avg_p_all),
-    #                                                                              np.mean(avg_r_all),
-    #                                                                              np.mean(avg_f1_all)))
+    test_test('GAMENet_7_4_test_all_input.txt')
+    # Encode_Decode_Time_BO = BayesianOptimization(
+    #         train, {
+    #             'emb_dims': (5, 8),
+    #             'LR': (-5, 0),
+    #             'l2_regularization': (-8, -3),
+    #         }
+    #     )
+    # Encode_Decode_Time_BO.maximize()
+    # print(Encode_Decode_Time_BO.max)
+    ddi_rate_all, ja_all, prauc_all, avg_p_all, avg_r_all, avg_f1_all = [[] for _ in range(6)]
+    for i in range(10):
+        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = train(LR=1.0, emb_dims=256,
+                                                          l2_regularization=1e-08)
+        ddi_rate_all.append(ddi_rate)
+        ja_all.append(ja)
+        prauc_all.append(prauc)
+        avg_p_all.append(avg_p)
+        avg_r_all.append(avg_r)
+        avg_f1_all.append(avg_f1)
+    print('ddi_rate{}---ja{}--prauc{}---avg_p{}---avg_r---{}--avg_f1--{}'.format(np.mean(ddi_rate_all),
+                                                                                 np.mean(ja_all),
+                                                                                 np.mean(prauc_all),
+                                                                                 np.mean(avg_p_all),
+                                                                                 np.mean(avg_r_all),
+                                                                                 np.mean(avg_f1_all)))
 
 
 

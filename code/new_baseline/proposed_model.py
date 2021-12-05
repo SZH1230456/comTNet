@@ -20,17 +20,16 @@ resume_name = ''
 
 
 class ProposedModel(nn.Module):
-    def __init__(self, vocab_size, emb_dim=64, device=torch.device('cuda:0')):
+    def __init__(self, vocab_size, emb_dim=64, k=2, device=torch.device('cuda:0')):
         super(ProposedModel, self).__init__()
-        self.K = len(vocab_size)
         self.vocab_size = vocab_size
         self.emb_dim = emb_dim
+        self.k = k
         self.device = device
         self.input_len = vocab_size[0] + vocab_size[1] + vocab_size[2]
 
         self.embedding = nn.Sequential(
-            nn.Embedding(self.input_len + 1, emb_dim, padding_idx=self.input_len),
-            nn.Dropout(p=0.3))
+            nn.Embedding(self.input_len + 1, emb_dim, padding_idx=self.input_len))
 
         self.encoder_1 = nn.GRU(emb_dim, emb_dim, batch_first=True)
         self.encoder_2 = nn.GRU(emb_dim, emb_dim, batch_first=True)
@@ -41,21 +40,32 @@ class ProposedModel(nn.Module):
         self.output = nn.Sequential(
             nn.Linear(self.emb_dim, self.vocab_size[2]))
 
-    def get_top_k_patient_similarity(self, all_visit, k):
-        similarity_matrix = nn.CosineSimilarity(all_visit, all_visit)
-        similar_patients = np.zeros(shape=[0, all_visit.shape[1]])
+    def get_top_k_patient_similarity(self, visit, all_visit, k):
+        cos = nn.CosineSimilarity(dim=1, eps=1e-6)
+        similarity_matrix = cos(visit, all_visit)
+        similarity_matrix = similarity_matrix.unsqueeze(dim=0)
+        similar_patients = torch.zeros(size=[0, all_visit.shape[1]]).to(self.device)
 
-        for i in range(all_visit.shape[0]):
+        for i in range(visit.shape[0]):
             one_patient_similarity = similarity_matrix[i, :]
-            top_k = np.argsort(-one_patient_similarity)[:k + 1]
+            top_k = torch.argsort(-one_patient_similarity)[:k]
             top_k_similarity = one_patient_similarity[top_k]
-            top_k_similarity = np.transpose(np.tile(top_k_similarity, (all_visit.shape[1], 1)))
-            similar_one_patient = all_visit[top_k, :]
-            similar_one_patient = similar_one_patient * top_k_similarity
-            similar_one_patient = similar_one_patient.reshape(-1, all_visit.shape[1])
-            similar_one_patient = np.sum(similar_one_patient, axis=0)
-            similar_patients = np.concatenate((similar_patients, similar_one_patient.reshape(-1, all_visit.shape[1])),
-                                              axis=0)
+            index = (top_k_similarity > 0.8).nonzero()
+            top_k = top_k[index]
+            top_k = top_k.squeeze(dim=1)
+            top_k_similarity = top_k_similarity[index]
+            top_k_similarity = top_k_similarity.squeeze(dim=1)
+            if min(top_k_similarity.shape) != 0:
+                top_k_similarity = torch.transpose((top_k_similarity.repeat(all_visit.shape[1], 1)), 0, 1)
+                similar_one_patient = all_visit[top_k]
+                similar_one_patient = similar_one_patient.view(-1, all_visit.shape[1])
+                similar_one_patient = similar_one_patient * top_k_similarity
+                similar_one_patient = similar_one_patient.reshape(-1, all_visit.shape[1])
+                similar_one_patient = torch.cat((visit[i, :].unsqueeze(dim=0), similar_one_patient), dim=0)
+                similar_one_patient = torch.sum(similar_one_patient, dim=0)
+            else:
+                similar_one_patient = visit[i, :].unsqueeze(dim=0)
+            similar_patients = torch.cat((similar_patients, similar_one_patient.reshape(-1, all_visit.shape[1])), dim=0)
         return similar_patients
 
     def attention(self, input):
@@ -93,7 +103,7 @@ class ProposedModel(nn.Module):
         all_input = c + current_visit
         return all_input
 
-    def forward(self, input):
+    def forward(self, input, data_all):
         all_visit_encoder = torch.zeros(size=[0, self.emb_dim]).to(self.device)
         all_patient_loss_1 = torch.zeros(size=[0, self.vocab_size[2]]).to(self.device)
         all_patient_loss_2 = torch.zeros(size=[0, self.vocab_size[2]]).to(self.device)
@@ -102,43 +112,51 @@ class ProposedModel(nn.Module):
         loss_1 = 0.0
         loss_2 = 0.0
         prediction = torch.zeros(size=[0, self.vocab_size[2]]).to(self.device)
+        for step, input_ in enumerate(data_all):
+            if len(input_) < 2:
+                continue
+            for j in range(1, len(input_)):
+                encoder_visit_ = self.attention(input_[:j+1])
+                all_visit_encoder = torch.cat((all_visit_encoder, encoder_visit_), dim=0)
+
         for i in range(1, len(input)):
             loss_1_target = np.zeros(shape=[1, self.vocab_size[2]])
-            loss_1_target[:, input[i][2]] = 1
+            loss_1_target[0, input[i][2]] = 1
 
             loss_2_target = np.full((1, self.vocab_size[2]), -1)
             for idx, item in enumerate(input[i][2]):
-                loss_2_target[:, idx] = item
+                loss_2_target[0, idx] = item
 
             all_patient_loss_1 = torch.cat((all_patient_loss_1, torch.FloatTensor(loss_1_target).to(self.device)), dim=0)
             all_patient_loss_2 = torch.cat((all_patient_loss_2, torch.LongTensor(loss_2_target).to(self.device)), dim=0)
 
             encoder_visit = self.attention(input[:i+1])
-            prediction_one_visit = torch.sigmoid(self.output(encoder_visit))
+            similar_patients = self.get_top_k_patient_similarity(encoder_visit, all_visit_encoder, self.k)
+            prediction_one_visit = torch.sigmoid(self.output(similar_patients))
             prediction = torch.cat((prediction, prediction_one_visit), dim=0)
 
             loss_1 += F.binary_cross_entropy(prediction_one_visit, torch.FloatTensor(loss_1_target).to(self.device))
             loss_2 += F.multilabel_margin_loss(prediction_one_visit, torch.LongTensor(loss_2_target).to(self.device))
-        loss = loss_1
+        loss = loss_1 * 0.9 + loss_2 * 0.1
 
         return all_patient_loss_1, all_patient_loss_2, prediction, loss
 
 
-def eval(model, data_eval, voc_size, epoch, k, emb_dims, device):
+def eval(model, data_eval, similar_bank, voc_size, epoch, k, emb_dims, device):
     with torch.no_grad():
         print('')
         model.eval()
         ja, prauc, avg_p, avg_r, avg_f1 = [[] for i in range(5)]
         y_pred_label_all_patients_for_ddi = np.zeros(shape=[0, voc_size[2]])
-        for step, input in enumerate(data_eval):
+        for step, input in enumerate(data_eval[:10]):
             if len(input) < 2:
                 continue
-            one_patient_loss_1, one_patient_loss_2, one_patient_prediction, one_patient_loss = model(input)
+            one_patient_loss_1, one_patient_loss_2, one_patient_prediction, one_patient_loss = model(input, similar_bank)
             one_patient_loss_1 = one_patient_loss_1.detach().cpu().numpy()
             one_patient_prediction = one_patient_prediction.detach().cpu().numpy()
             y_pred_label = one_patient_prediction.copy().reshape(-1,)
-            y_pred_label[y_pred_label >= 0.3] = 1
-            y_pred_label[y_pred_label < 0.3] = 0
+            y_pred_label[y_pred_label >= 0.2] = 1
+            y_pred_label[y_pred_label < 0.2] = 0
 
             adm_ja, adm_prauc, adm_avg_p, adm_avg_r, adm_avg_f1 = multi_label_metric(np.array(one_patient_loss_1),
                                                                                      np.array(y_pred_label).reshape(-1, voc_size[2]),
@@ -167,9 +185,9 @@ def eval(model, data_eval, voc_size, epoch, k, emb_dims, device):
 
 
 def train(emb_dims, LR, l2_regularization):
-    emb_dims = 2 ** int(emb_dims)
-    LR = 10 ** LR
-    l2_regularization = 10 ** l2_regularization
+    # emb_dims = 2 ** int(emb_dims)
+    # LR = 10 ** LR
+    # l2_regularization = 10 ** l2_regularization
     print('emb_dims___{}__LR__{}__l2_regularization___{}'.format(emb_dims, LR, l2_regularization))
 
     data_path = '../../data/records_final.pkl'
@@ -188,10 +206,9 @@ def train(emb_dims, LR, l2_regularization):
     voc_size = (len(diag_voc.idx2word), len(pro_voc.idx2word), len(med_voc.idx2word))
 
     EPOCH = 10
-    k = 2
-    batch_size = 10
+    k = 1
 
-    model = ProposedModel(voc_size, emb_dims, device)
+    model = ProposedModel(voc_size, emb_dims, k, device)
     model.to(device)
 
     weight_decay_list = (param for name, param in model.named_parameters()
@@ -202,18 +219,20 @@ def train(emb_dims, LR, l2_regularization):
                   {'params': no_decay_list, 'weight_decay': 0.}]
     optimizer = Adam(parameters, lr=LR, weight_decay=l2_regularization)
 
+    max_ddi_rate, max_ja, max_prauc, max_avg_p, max_avg_r, max_avg_f1 = [0 for i in range(6)]
     for epoch in range(EPOCH):
         start_time = time.time()
         model.train()
-        for step, input in enumerate(data_train[:10]):
+        for step, input in enumerate(data_train[:len(data_train)-100]):
             if len(input) < 2:
                 continue
-            all_patient_loss_1, all_patient_loss_2, prediction_, loss = model(input)
+            all_patient_loss_1, all_patient_loss_2, prediction_, loss = model(input, data_train[-100:])
             optimizer.zero_grad()
             loss.backward(retain_graph=True)
             optimizer.step()
         ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = eval(model,
-                                                         data_eval[:10], voc_size,
+                                                         data_test, data_train[-100:],
+                                                         voc_size,
                                                          epoch, k, emb_dims, device)
         end_time = time.time()
         elapsed_time = (end_time - start_time) / 60
@@ -222,19 +241,44 @@ def train(emb_dims, LR, l2_regularization):
                                                                      loss.item(),
                                                                      elapsed_time,
                                                                      elapsed_time * (EPOCH - epoch - 1) / 60))
-    return ja
-    # return ddi_rate, ja, prauc, avg_p, avg_r, avg_f1
+        if ja > max_ja:
+            max_ja = ja
+            max_ddi_rate = ddi_rate
+            max_prauc = prauc
+            max_avg_p = avg_p
+            max_avg_r = avg_r
+            max_avg_f1 = avg_f1
+    # return max_ja
+    return max_ddi_rate, max_ja, max_prauc, max_avg_p, max_avg_r, max_avg_f1
 
 
 if __name__ == '__main__':
     # train(emb_dims=128, LR=0.0001, l2_regularization=1e-5)
-    # test_test('proposed_model_6_24.txt')
-    Encode_Decode_Time_BO = BayesianOptimization(
-            train, {
-                'emb_dims': (5, 8),
-                'LR': (-5, 0),
-                'l2_regularization': (-8, -3),
-            }
-        )
-    Encode_Decode_Time_BO.maximize()
-    print(Encode_Decode_Time_BO.max)
+    test_test('proposed_model_test_7_14_k_1_0.2.txt')
+    # Encode_Decode_Time_BO = BayesianOptimization(
+    #         train, {
+    #             'emb_dims': (5, 8),
+    #             'LR': (-5, 0),
+    #             'l2_regularization': (-8, -3),
+    #         }
+    #     )
+    # Encode_Decode_Time_BO.maximize()
+    # print(Encode_Decode_Time_BO.max)
+
+    ddi_rate_all, ja_all, prauc_all, avg_p_all, avg_r_all, avg_f1_all = [[] for _ in range(6)]
+    for i in range(10):
+        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = train(LR=0.004307511539609676,
+                                                          l2_regularization=1e-8,
+                                                          emb_dims=256)
+        ddi_rate_all.append(ddi_rate)
+        ja_all.append(ja)
+        prauc_all.append(prauc)
+        avg_p_all.append(avg_p)
+        avg_r_all.append(avg_r)
+        avg_f1_all.append(avg_f1)
+    print('ddi_rate{}---ja{}--prauc{}---avg_p{}---avg_r---{}--avg_f1--{}'.format(np.mean(ddi_rate_all),
+                                                                                 np.mean(ja_all),
+                                                                                 np.mean(prauc_all),
+                                                                                 np.mean(avg_p_all),
+                                                                                 np.mean(avg_r_all),
+                                                                                 np.mean(avg_f1_all)))
