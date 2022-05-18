@@ -100,10 +100,10 @@ class ProposedModel(nn.Module):
 
         current_visit = self.embedding(torch.LongTensor(input_seq[-1]).to(self.device))
         current_visit = torch.sum(current_visit, dim=0).unsqueeze(dim=0)  # (1, dim_emb)
-        all_input = c + current_visit
+        all_input = c
         return all_input
 
-    def forward(self, input, data_all):
+    def forward(self, input, data_all, ddi_adj):
         all_visit_encoder = torch.zeros(size=[0, self.emb_dim]).to(self.device)
         all_patient_loss_1 = torch.zeros(size=[0, self.vocab_size[2]]).to(self.device)
         all_patient_loss_2 = torch.zeros(size=[0, self.vocab_size[2]]).to(self.device)
@@ -111,6 +111,7 @@ class ProposedModel(nn.Module):
 
         loss_1 = 0.0
         loss_2 = 0.0
+        batch_neg = 0.0
         prediction = torch.zeros(size=[0, self.vocab_size[2]]).to(self.device)
         for step, input_ in enumerate(data_all):
             if len(input_) < 2:
@@ -137,26 +138,29 @@ class ProposedModel(nn.Module):
 
             loss_1 += F.binary_cross_entropy(prediction_one_visit, torch.FloatTensor(loss_1_target).to(self.device))
             loss_2 += F.multilabel_margin_loss(prediction_one_visit, torch.LongTensor(loss_2_target).to(self.device))
-        loss = loss_1 * 0.9 + loss_2 * 0.1
+            prediction_one_visit = torch.reshape(prediction_one_visit, (1, -1))
+            neg_pred_prob = prediction_one_visit.t() * prediction_one_visit  # (voc_size, voc_size)
+            batch_neg += neg_pred_prob.mul(ddi_adj).mean()
 
+        loss = loss_1 * 0.9 + loss_2 * 0.1 + batch_neg
         return all_patient_loss_1, all_patient_loss_2, prediction, loss
 
 
-def eval(model, data_eval, similar_bank, voc_size, epoch, k, emb_dims, device):
+def eval(model, data_eval, similar_bank, voc_size, epoch, ddi_adj, k, emb_dims, device):
     with torch.no_grad():
         print('')
         model.eval()
         ja, prauc, avg_p, avg_r, avg_f1 = [[] for i in range(5)]
         y_pred_label_all_patients_for_ddi = np.zeros(shape=[0, voc_size[2]])
-        for step, input in enumerate(data_eval[:10]):
+        for step, input in enumerate(data_eval):
             if len(input) < 2:
                 continue
-            one_patient_loss_1, one_patient_loss_2, one_patient_prediction, one_patient_loss = model(input, similar_bank)
+            one_patient_loss_1, one_patient_loss_2, one_patient_prediction, one_patient_loss = model(input, similar_bank, ddi_adj)
             one_patient_loss_1 = one_patient_loss_1.detach().cpu().numpy()
             one_patient_prediction = one_patient_prediction.detach().cpu().numpy()
             y_pred_label = one_patient_prediction.copy().reshape(-1,)
-            y_pred_label[y_pred_label >= 0.2] = 1
-            y_pred_label[y_pred_label < 0.2] = 0
+            y_pred_label[y_pred_label >= 0.4] = 1
+            y_pred_label[y_pred_label < 0.4] = 0
 
             adm_ja, adm_prauc, adm_avg_p, adm_avg_r, adm_avg_f1 = multi_label_metric(np.array(one_patient_loss_1),
                                                                                      np.array(y_pred_label).reshape(-1, voc_size[2]),
@@ -177,6 +181,8 @@ def eval(model, data_eval, similar_bank, voc_size, epoch, k, emb_dims, device):
             avg_f1.append(adm_avg_f1)
 
         ddi_rate = ddi_rate_score_(y_pred_label_all_patients_for_ddi)
+        # np.save('Proposed_predicted_medication_' + str(ddi_rate) + '_' + str(epoch) + '.npy', y_pred_label_all_patients_for_ddi)
+        # print('保存成功！')
 
         llprint('\t epoch: %.2f, DDI Rate: %.4f, Jaccard: %.4f, '
                 ' PRAUC: %.4f, AVG_PRC: %.4f, AVG_RECALL: %.4f, AVG_F1: %.4f\n' % (
@@ -188,11 +194,14 @@ def train(emb_dims, LR, l2_regularization):
     # emb_dims = 2 ** int(emb_dims)
     # LR = 10 ** LR
     # l2_regularization = 10 ** l2_regularization
-    print('emb_dims___{}__LR__{}__l2_regularization___{}'.format(emb_dims, LR, l2_regularization))
 
     data_path = '../../data/records_final.pkl'
     voc_path = '../../data/voc_final.pkl'
     device = torch.device('cuda:0')
+
+    ddi_adj_path = '../data/ddi_A_final.pkl'
+    ddi_adj = dill.load(open(ddi_adj_path, 'rb'))
+    ddi_adj = torch.FloatTensor(ddi_adj).to(device)
 
     data = dill.load(open(data_path, 'rb'))
     voc = dill.load(open(voc_path, 'rb'))
@@ -206,7 +215,8 @@ def train(emb_dims, LR, l2_regularization):
     voc_size = (len(diag_voc.idx2word), len(pro_voc.idx2word), len(med_voc.idx2word))
 
     EPOCH = 10
-    k = 1
+    k = 3
+    print('emb_dims___{}__LR__{}__l2_regularization___{}___k__{}'.format(emb_dims, LR, l2_regularization, k))
 
     model = ProposedModel(voc_size, emb_dims, k, device)
     model.to(device)
@@ -226,14 +236,15 @@ def train(emb_dims, LR, l2_regularization):
         for step, input in enumerate(data_train[:len(data_train)-100]):
             if len(input) < 2:
                 continue
-            all_patient_loss_1, all_patient_loss_2, prediction_, loss = model(input, data_train[-100:])
+            all_patient_loss_1, all_patient_loss_2, prediction_, loss = model(input, data_train[-100:], ddi_adj)
+
             optimizer.zero_grad()
             loss.backward(retain_graph=True)
             optimizer.step()
         ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = eval(model,
                                                          data_test, data_train[-100:],
                                                          voc_size,
-                                                         epoch, k, emb_dims, device)
+                                                         epoch, ddi_adj, k, emb_dims, device)
         end_time = time.time()
         elapsed_time = (end_time - start_time) / 60
         llprint('\tEpoch: %d, Loss1: %.4f, '
@@ -241,20 +252,19 @@ def train(emb_dims, LR, l2_regularization):
                                                                      loss.item(),
                                                                      elapsed_time,
                                                                      elapsed_time * (EPOCH - epoch - 1) / 60))
-        if ja > max_ja:
+        if prauc > max_prauc:
             max_ja = ja
             max_ddi_rate = ddi_rate
             max_prauc = prauc
             max_avg_p = avg_p
             max_avg_r = avg_r
             max_avg_f1 = avg_f1
-    # return max_ja
+    # return max_prauc
     return max_ddi_rate, max_ja, max_prauc, max_avg_p, max_avg_r, max_avg_f1
 
 
 if __name__ == '__main__':
-    # train(emb_dims=128, LR=0.0001, l2_regularization=1e-5)
-    test_test('proposed_model_test_7_14_k_1_0.2.txt')
+    # test_test('proposed_model_test_12_7_k_3_0.4_前几次数据_ddi_.txt')
     # Encode_Decode_Time_BO = BayesianOptimization(
     #         train, {
     #             'emb_dims': (5, 8),
@@ -267,9 +277,9 @@ if __name__ == '__main__':
 
     ddi_rate_all, ja_all, prauc_all, avg_p_all, avg_r_all, avg_f1_all = [[] for _ in range(6)]
     for i in range(10):
-        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = train(LR=0.004307511539609676,
-                                                          l2_regularization=1e-8,
-                                                          emb_dims=256)
+        ddi_rate, ja, prauc, avg_p, avg_r, avg_f1 = train(LR=0.00013220933006780105,
+                                                          l2_regularization=8.812171128295484e-05,
+                                                          emb_dims=128)
         ddi_rate_all.append(ddi_rate)
         ja_all.append(ja)
         prauc_all.append(prauc)
