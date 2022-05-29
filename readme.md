@@ -1,10 +1,9 @@
-## 
+## Files
 ```
 ├── code
 │    ├── new_baseline
 │    │   ├── diagnosis prediction
-│    │   ├── medication recommendation
-
+│    │   └──── medication recommendation
 ├── data
 │    ├── DIAGNOSES_ICD.csv
 │    ├── PRESCRIPTIONS.csv
