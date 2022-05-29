@@ -1,6 +1,7 @@
 import dill
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 import matplotlib
 from util import multi_label_metric
 
@@ -135,11 +136,12 @@ def statistical_top_15_drug_code():
 
 
 def plot_top_k_statistical():
+    plt.rcParams['font.family'] = "Times"
     icd_code_name, icd_values = statistical_top_15_cid_code()
     pro_code_name, pro_values = statistical_top_15_pro_code()
     drug_code_name, drug_values = statistical_top_15_drug_code()
 
-    plt.figure(figsize=(20, 5), dpi=600)
+    plt.figure(figsize=(20, 5), dpi=1200)
     plt.subplot(131)  # 将一个画板分割成两行一列共两个绘图区域
     plt.bar(icd_code_name[:10], icd_values[:10], color='mediumpurple')
     plt.xlabel('ICD-9 Code')
@@ -158,11 +160,12 @@ def plot_top_k_statistical():
     plt.ylabel('Count')
     plt.title('Medication Distribution')
 
-    plt.savefig('统计前10个ICD.png', dpi=600, bbox_inches='tight')
+    plt.savefig('统计前10个ICD.png', dpi=1200, bbox_inches='tight')
     plt.show()
 
 
 def plot_figure():
+    plt.rcParams['font.family'] = "Times"
     x = [1, 3, 5, 8, 10]
     Jacard = [0.387053343, 0.392214684373899, 0.406960044143724, 0.405960352957997, 0.40071274043793]
     Recall = [0.756057880017882, 0.769399976479146, 0.783217405065719, 0.777966769547776, 0.777305384722024]
@@ -173,12 +176,13 @@ def plot_figure():
     Recall_leap = [[0.5266] for i in range(5)]
     F1_leap = [[0.5407] for i in range(5)]
     AUC_LEAP = [[0.5288] for i in range(5)]
-    plt.figure(figsize=(15, 2.5))
-    ax1 = plt.subplot(1, 4, 1)
-    ax2 = plt.subplot(1, 4, 2)
-    ax3 = plt.subplot(1, 4, 3)
-    ax4 = plt.subplot(1, 4, 4)
-    plt.subplots_adjust(wspace=0.5, hspace=0)  # 调整子图间距
+    # plt.figure(figsize=(15, 2.5))
+    plt.figure()
+    ax1 = plt.subplot(221)
+    ax2 = plt.subplot(222)
+    ax3 = plt.subplot(223)
+    ax4 = plt.subplot(224)
+    plt.subplots_adjust(wspace=0.5, hspace=0.5)  # 调整子图间距
 
     plt.sca(ax1)
     plt.plot(x, PR_AUC, 'ro--', label='Proposed')
@@ -205,7 +209,7 @@ def plot_figure():
     plt.plot(x, Recall_leap, color='#808080', linestyle='--', label='LEAP')
     plt.xlim(1, 10)
     plt.xticks(x)
-    plt.ylim(0.3, 1.0)
+    plt.ylim(0.3, 1.1)
     plt.xlabel('$n$')
     plt.ylabel('Recall')
     plt.legend()
@@ -222,7 +226,7 @@ def plot_figure():
 
     plt.suptitle('Medication recommendation performance')
     # plt.gcf().savefig('size_performance.eps', dpi=600, format='eps', bbox_inches='tight')
-    plt.savefig('size_performance_5_11.png', dpi=600, bbox_inches='tight')
+    plt.savefig('size_performance_5_26.png', dpi=1200, bbox_inches='tight')
     plt.show()
 
     # x = [0, 1, 3, 5, 8, 10]
@@ -289,13 +293,17 @@ def plot_figure():
 
 def analysis_results():
     k_nearest_results = np.load(
-        'H:\\IJMEDI\\GAMENet\code\\new_baseline\\medicine recommendation\\save_results\\k-nearest\\k_nearest_predicted_medication_0.07911120730079717_.npy', allow_pickle=True)
+        'H:\\IJMEDI\\GAMENet\code\\new_baseline\\medication recommendation\\save_results\\k-nearest\\k_nearest_predicted_medication_0.07911120730079717_.npy',
+        allow_pickle=True)
     k_frequency_results = np.load(
-        'H:\\IJMEDI\\GAMENet\code\\new_baseline\\medicine recommendation\\save_results\\\k-frequency\\k_frequency_predicted_medication_0.07728866740494647_9.npy',allow_pickle=True)
+        'H:\\IJMEDI\\GAMENet\code\\new_baseline\\medication recommendation\\save_results\\\k-frequency\\k_frequency_predicted_medication_0.07728866740494647_9.npy',
+        allow_pickle=True)
     lr_results = np.load(
-        'H:\\IJMEDI\\GAMENet\code\\new_baseline\\medicine recommendation\\save_results\\LR\\predicted_medication_0.010188420463079646_2.npy', allow_pickle=True)
+        'H:\\IJMEDI\\GAMENet\code\\new_baseline\\medication recommendation\\save_results\\LR\\predicted_medication_0.010188420463079646_2.npy',
+        allow_pickle=True)
     leap_results = np.load(
-        'H:\\IJMEDI\\GAMENet\code\\new_baseline\\medicine recommendation\\save_results\\LEAP\\LEAP_predicted_medication_0.06086239927875134_8.npy', allow_pickle=True)
+        'H:\\IJMEDI\\GAMENet\code\\new_baseline\\medication recommendation\\save_results\\LEAP\\LEAP_predicted_medication_0.06086239927875134_8.npy',
+        allow_pickle=True)
 
     lr_results[lr_results > 0] = 1
     k_frequency_results_format = np.zeros(shape=[len(k_frequency_results), 145])
@@ -341,5 +349,94 @@ def save_labels():
     print('保存成功！')
 
 
+def ddi_score(y_pred):
+    ddi_adj_path = '../../data/ddi_A_final.pkl'
+    ddi_A = dill.load(open(ddi_adj_path, 'rb'))
+    score = []
+    for adm in y_pred:
+        all_cnt = 0
+        dd_cnt = 0
+        med_code_set = np.where(adm == 1)[0]
+        for i, med_i in enumerate(med_code_set):
+            for j, med_j in enumerate(med_code_set):
+                if j <= i:
+                    continue
+                all_cnt += 1
+                if ddi_A[med_i, med_j] == 1 or ddi_A[med_j, med_i] == 1:
+                    dd_cnt += 1
+                    print(med_i, med_j)
+        if all_cnt == 0:
+            return 0
+        else:
+            score.append(dd_cnt / all_cnt)
+    return score
+
+
+def plot_results():
+    # 构造数据
+    labels = ['Ground-truth', 'K-frequency', 'LR', 'LEAP', 'GAMENet', 'Proposed']
+    data_a = [0.079, 0.11, 0.089, 0.064, 0.057, 0.060]
+
+    x = np.arange(len(labels))
+    x = x + 1.5
+    width = 0.4
+
+    # "#e74c3c"
+    flatui = sns.color_palette("Blues_r", n_colors=6)
+    # flatui = ['#34495e'] * 6
+    # flatui = ["#9b59b6", "#3498db", "#95a5a6", "#2ecc71", "#34495e", "#948279"]
+    plt.rcParams['font.family'] = "Times"
+    # plots
+    fig, ax = plt.subplots(figsize=(5, 3.5), dpi=200)
+    ax.grid(alpha=0.1)
+    ax.bar(x - width / 2, data_a, width, color=flatui, ec='black', lw=.5)
+    # 定制化设计
+    ax.tick_params(axis='x', direction='in', bottom=False)
+    ax.tick_params(axis='y', direction='out', labelsize=8, length=3)
+    ax.set_xticks(x - 0.2)
+    ax.set_xticklabels(labels, size=8)
+    # ax.set_ylim(bottom=0, top=0.75)
+    # ax.set_yticks(np.arange(0, 0.8, step=0.1))
+
+    # for spine in ['top', 'right']:
+    #     ax.spines[spine].set_color('none')
+
+    ax.legend(fontsize=7, frameon=False)
+    plt.xlabel('Model')
+    plt.ylabel('DDI Rate')
+
+    plt.savefig("DDI_case_study_5_26.png", dpi=1200, bbox_inches='tight', pad_inches=0.0)
+    plt.show()
+
+
 if __name__ == '__main__':
-    plot_figure()
+    plot_top_k_statistical()
+    # plot_figure()
+    plot_results()
+    # ground-truth: 0
+    y_pred = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 15, 19, 20, 26,
+              27, 31, 34, 37, 45, 81]
+
+    # k-nearest: 0
+    # y_pred = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12, 26, 27, 31, 38, 43, 44]
+
+    # k_frequency: 0.1111111111111111
+    # y_pred = [0, 1, 2, 3, 4, 6, 12, 19, 26]
+
+    # lr: 0.08947368421052632
+    # y_pred = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 19, 20, 25, 26, 28, 43, 44, 87]
+
+    # leap: 0.06432748538011696
+    # y_pred = [0, 1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 19, 20, 26, 27, 28, 43, 44, 87]
+
+    # gamenet: 0.05714285714285714
+    # y_pred = [4, 6, 7, 8, 9, 11, 25, 27, 28, 32, 43, 44, 80, 84, 87]
+
+    # proposed: 0.06159420289855073
+    # y_pred = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 15, 17, 19, 20, 22, 26, 27, 28, 31, 34, 37]
+    y_pred_ = np.zeros(shape=[1, 145])
+    for i in y_pred:
+        y_pred_[0, i] = 1
+    score = ddi_score(y_pred_)
+    print(score)
+    # plot_figure()
